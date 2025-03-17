@@ -18,7 +18,7 @@ import java.util.Map;
 public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(jobHandler(), "/socket/job/progress/*")
+        registry.addHandler(jobHandler(), "/socket/job/progress/{jobId}")
                 .addInterceptors(jobInterceptor());
     }
 
@@ -28,7 +28,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
             @Override
             public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
                 String path = request.getURI().getPath();
-                String jobId = path.substring(path.lastIndexOf('/'+1));
+                String jobId = path.substring(path.lastIndexOf('/')+1);
                 attributes.put("jobId", jobId);
                 return true;
             }
